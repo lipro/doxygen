@@ -1211,6 +1211,8 @@ void DotWorkerThread::cleanup()
 
 //--------------------------------------------------------------------
 
+#define DIRECT_DOT_RUN 1
+
 DotManager *DotManager::m_theInstance = 0;
 
 DotManager *DotManager::instance()
@@ -1227,6 +1229,7 @@ DotManager::DotManager() : m_dotMaps(1009)
   m_dotRuns.setAutoDelete(TRUE);
   m_dotMaps.setAutoDelete(TRUE);
   m_queue = new DotRunnerQueue;
+#ifndef DIRECT_DOT_RUN
   int i;
   int numThreads = QMIN(32,Config_getInt("DOT_NUM_THREADS"));
   if (numThreads!=1)
@@ -1247,6 +1250,7 @@ DotManager::DotManager() : m_dotMaps(1009)
     }
     ASSERT(m_workers.count()>0);
   }
+#endif
 }
 
 DotManager::~DotManager()
@@ -1347,7 +1351,11 @@ bool DotManager::run()
   // fill work queue with dot operations
   DotRunner *dr;
   int prev=1;
+#ifdef DIRECT_DOT_RUN
+  if (1)
+#else
   if (m_workers.count()==0) // no threads to work with
+#endif
   {
     for (li.toFirst();(dr=li.current());++li)
     {
