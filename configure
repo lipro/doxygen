@@ -615,7 +615,7 @@ if test "$f_python" = NO; then
           python_version=`$j/$i -c "import platform; print(platform.python_version())"`;
           break 2
         elif test `$j/$i -c "import sys; print(sys.version_info[0])"` = 2; then
-          if test `$j/$i -c "import sys; print(sys.version_info[1])"` -ge 6; then
+          if test `$j/$i -c "import sys; print(sys.version_info[1])"` -ge 4; then
             python_prog="$j/$i";
             python_version=`$j/$i -c "import platform; print(platform.python_version())"`;
             break 2
@@ -629,7 +629,7 @@ fi
 
 if test "$f_python" = NO; then
   if test "$python_found" = YES; then
-    echo "version should be python 2.6 or higher."
+    echo "version should be python 2.4 or higher."
   else
     echo "not found!";
   fi

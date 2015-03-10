@@ -14,10 +14,12 @@
 # Documents produced by Doxygen are derivative works derived from the
 # input used in their production; they are not affected by this license.
 #
-from __future__ import print_function
 from os         import listdir, stat, walk
 from os.path    import isfile, join, splitext
 import sys
+
+def print_function(text, file):
+     file.write(text)
 
 class File(object):
 	def __init__(self,directory,subdir,fileName,mode):
@@ -33,17 +35,17 @@ class File(object):
 		if isinstance(byte,int):
 			return "%02x" % byte
 		else:
-			return format(ord(byte),'02x')
+			return "%02x" % ord(byte)
 
 	def writeBytes(self,data,outputFile):
 		bytes_per_line=16
-		print("static const unsigned char %s_data[] = " % self.bareName,file=outputFile)
-		print("{",file=outputFile)
+		print_function("static const unsigned char %s_data[] = " % self.bareName,file=outputFile)
+		print_function("{",file=outputFile)
 		lines = [data[x:x+bytes_per_line] for x in range(0,len(data),bytes_per_line)]
 		linesAsString = ',\n  '.join([', '.join(['0x'+self.formatByte(byte) for byte in line]) for line in lines])
-		print('  %s' % linesAsString,file=outputFile)
-		print("};",file=outputFile)
-		print("const int %s_len = %d;\n" % (self.bareName,len(data)),file=outputFile)
+		print_function('  %s' % linesAsString,file=outputFile)
+		print_function("};",file=outputFile)
+		print_function("const int %s_len = %d;\n" % (self.bareName,len(data)),file=outputFile)
 
 	def convertToBytes(self,outputFile):
 		lines = [x for x in self.inputFile.readlines() if not x.startswith('#')]
@@ -66,7 +68,7 @@ class VerbatimFile(File):
 	def writeContents(self,outputFile):
 		self.writeBytes(self.inputFile.read(),outputFile)
 	def writeDirEntry(self,outputFile):
-		print("  { \"%s\", \"%s\", %s_data, %s_len, Resource::Verbatim }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
+		print_function("  { \"%s\", \"%s\", %s_data, %s_len, Resource::Verbatim }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
 
 class CSSFile(File):
 	def __init__(self,directory,subdir,fileName):
@@ -74,7 +76,7 @@ class CSSFile(File):
 	def writeContents(self,outputFile):
 		self.writeBytes(self.inputFile.read(),outputFile)
 	def writeDirEntry(self,outputFile):
-		print("  { \"%s\", \"%s\", %s_data, %s_len, Resource::CSS }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
+		print_function("  { \"%s\", \"%s\", %s_data, %s_len, Resource::CSS }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
 
 class LumFile(File):
 	def __init__(self,directory,subdir,fileName):
@@ -82,7 +84,7 @@ class LumFile(File):
 	def writeContents(self,outputFile):
 		self.convertToBytes(outputFile)
 	def writeDirEntry(self,outputFile):
-		print("  { \"%s\", \"%s\", %s_data, %s_len, Resource::Luminance }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
+		print_function("  { \"%s\", \"%s\", %s_data, %s_len, Resource::Luminance }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
 
 class LumaFile(File):
 	def __init__(self,directory,subdir,fileName):
@@ -90,7 +92,7 @@ class LumaFile(File):
 	def writeContents(self,outputFile):
 		self.convertToBytes(outputFile)
 	def writeDirEntry(self,outputFile):
-		print("  { \"%s\", \"%s\", %s_data, %s_len, Resource::LumAlpha }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
+		print_function("  { \"%s\", \"%s\", %s_data, %s_len, Resource::LumAlpha }," % (self.subdir,self.fileName,self.bareName,self.bareName), file=outputFile)
 
 def main():
 	if len(sys.argv)<3:
@@ -99,20 +101,23 @@ def main():
 	files = []
 	for dirName, subdirList, fileList in walk(directory):
 		for fname in sorted(fileList):
-			subdir = dirName[len(directory)+1:] if dirName.startswith(directory) else dirName
+			if dirName.startswith(directory):
+			  subdir = dirName[len(directory)+1:]
+			else:
+			  subdir = dirName
 			if subdir:
 				files.append(File.factory(directory,subdir,fname))
 	outputFile = open(sys.argv[2],"w")
-	print("#include \"resourcemgr.h\"\n",file=outputFile)
+	print_function("#include \"resourcemgr.h\"\n",file=outputFile)
 	for f in files:
 		f.writeContents(outputFile)
-	print("static Resource resourceDir[] =",file=outputFile)
-	print("{",file=outputFile)
+	print_function("static Resource resourceDir[] =",file=outputFile)
+	print_function("{",file=outputFile)
 	for f in files:
 		f.writeDirEntry(outputFile)
-	print("};",file=outputFile)
-	print("static int resourceDir_len = %s;" % len(files), file=outputFile)
-	print("void initResources() { ResourceMgr::instance().registerResources(resourceDir,resourceDir_len); }",file=outputFile)
+	print_function("};",file=outputFile)
+	print_function("static int resourceDir_len = %s;" % len(files), file=outputFile)
+	print_function("void initResources() { ResourceMgr::instance().registerResources(resourceDir,resourceDir_len); }",file=outputFile)
 
 if __name__ == '__main__':
 	main()

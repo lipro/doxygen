@@ -170,7 +170,10 @@ def prepCDocs(node):
 			if (node.hasAttribute('altdefval')):
 			  doc += "<br/>%s: %s." % ("The default value is", "system dependent")
 			else:
-			  doc += "<br/>%s: %s." % ("The default value is", "YES" if (defval == "1") else "NO")
+				if (defval == "1"):
+				  doc += "<br/>%s: %s." % ("The default value is", "YES")
+				else:
+				  doc += "<br/>%s: %s." % ("The default value is", "NO")
 		elif (type == 'list'):
 			if format == 'string':
 				values = collectValues(node)
@@ -431,8 +434,10 @@ def parseOptionDoc(node, first):
 			if (node.hasAttribute('altdefval')):
 				print("The default value is: system dependent.")
 			else:
-				print("The default value is: <code>%s</code>." % (
-					"YES" if (defval == "1") else "NO"))
+				if (defval == "1"):
+				  print("The default value is: <code>%s</code>." % ("YES"))
+				else:
+				  print("The default value is: <code>%s</code>." % ("NO"))
 			print("")
 		elif (type == 'list'):
 			if format == 'string':
@@ -560,7 +565,8 @@ def main():
 		sys.exit('Usage: %s -doc|-cpp|-wiz config.xml' % sys.argv[0])
 	try:
 		doc = xml.dom.minidom.parse(sys.argv[2])
-	except Exception as inst:
+	except Exception:
+		type, inst = sys.exc_info()[:2]
 		sys.stdout = sys.stderr
 		print("")
 		print(inst)
