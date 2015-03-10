@@ -3093,7 +3093,7 @@ to be found in the default search path.
 ]]>
       </docs>
     </option>
-    <option type='bool' id='HAVE_DOT' defval='0'>
+    <option type='bool' id='HAVE_DOT' defval='1'>
       <docs>
 <![CDATA[
  If you set the \c HAVE_DOT tag to \c YES then doxygen will assume the \c dot tool is
@@ -3276,8 +3276,21 @@ to be found in the default search path.
 ]]>
       </docs>
       <value name='png'/>
+      <value name='png:cairo'/>
+      <value name='png:cairo:cairo'/>
+      <value name='png:cairo:gd'/>
+      <value name='png:gd'/>
+      <value name='png:gd:gd'/>
       <value name='jpg'/>
+      <value name='jpg:cairo'/>
+      <value name='jpg:cairo:gd'/>
+      <value name='jpg:gd'/>
+      <value name='jpg:gd:gd'/>
       <value name='gif'/>
+      <value name='gif:cairo'/>
+      <value name='gif:cairo:gd'/>
+      <value name='gif:gd'/>
+      <value name='gif:gd:gd'/>
       <value name='svg'/>
     </option>
     <option type='bool' id='INTERACTIVE_SVG' defval='0' depends='HAVE_DOT'>
