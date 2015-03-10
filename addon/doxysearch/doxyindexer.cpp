@@ -156,7 +156,7 @@ class XMLContentHandler : public QXmlDefaultHandler
     /** Free data handler */
    ~XMLContentHandler()
     {
-      m_db.commit();
+      m_db.flush();
     }
 
   private:
