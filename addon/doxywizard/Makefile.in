@@ -10,7 +10,6 @@
 # See the GNU General Public License for more details.
 # 
 
-QMAKE=$(QTDIR)/bin/qmake $(MKSPECS)
 INCBUFSIZE=$(PYTHON) ../../src/increasebuffer.py
 
 all: Makefile.doxywizard  

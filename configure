@@ -362,9 +362,10 @@ if test "$f_wizard" = YES; then
   if test -z "$QTDIR"; then
     echo "  QTDIR environment variable not set!"
     printf "  Checking for Qt..."
-    for d in /usr/{lib,share,qt}/{qt-4,qt4,qt,qt*,4} /usr; do
+    for d in /usr/{lib64,lib,share,qt}/{qt-4,qt4,qt,qt*,4} /usr; do
       if test -x "$d/bin/qmake"; then
         QTDIR=$d
+        QMAKE=$d/bin/qmake
         break 2
       fi
     done
@@ -771,6 +772,8 @@ INSTTOOL  = $f_insttool
 DOXYDOCS  = ..
 DOCDIR    = $f_docdir
 QTDIR     = $QTDIR
+QMAKE     = $QMAKE
+MAN1DIR    = share/man/man1
 EOF
 
 if test "$f_dot" != NO; then
