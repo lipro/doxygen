@@ -1257,7 +1257,6 @@ void generateSqlite3()
   QCString outputDirectory = Config_getString("OUTPUT_DIRECTORY");
   QDir sqlite3Dir(outputDirectory);
   sqlite3 *db;
-  sqlite3_initialize();
   int rc = sqlite3_open_v2(outputDirectory+"/doxygen_sqlite3.db", &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, 0);
   if (rc != SQLITE_OK)
   {
