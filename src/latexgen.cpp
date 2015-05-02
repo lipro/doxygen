@@ -471,8 +471,7 @@ static void writeDefaultHeaderPart1(FTextStream &t)
     // the index (be it as roman numbers)
     t << "\\hypersetup{pageanchor=false,\n"
       << "             bookmarks=true,\n"
-      << "             bookmarksnumbered=true,\n"
-      << "             pdfencoding=unicode\n"
+      << "             bookmarksnumbered=true\n"
       << "            }\n";
   }
   t << "\\pagenumbering{roman}\n"
