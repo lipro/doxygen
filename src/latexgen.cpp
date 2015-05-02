@@ -269,8 +269,7 @@ static void writeDefaultHeaderPart1(FTextStream &t)
   t << "% Packages required by doxygen\n"
        "\\usepackage{fixltx2e}\n" // for \textsubscript
        "\\usepackage{calc}\n"
-       "\\usepackage{doxygen}\n"
-       "\\usepackage[export]{adjustbox} % also loads graphicx\n";
+       "\\usepackage{doxygen}\n";
   QStrList extraLatexStyle = Config_getList("LATEX_EXTRA_STYLESHEET");
   for (uint i=0; i<extraLatexStyle.count(); ++i)
   {
